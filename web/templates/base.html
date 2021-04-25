@@ -34,7 +34,7 @@ function CustomAlerth(){
       $("#dialogbox").css("top","40px")
       document.getElementById('dialogboxhead').innerHTML = "";
       document.getElementById('dialogboxbody').innerHTML = dialog;
-      document.getElementById('dialogboxfoot').innerHTML = '<button id="alertok" style="font-size:18px;width:80px;padding:4px 10px;margin:4x; border-radius:10px;opacity:0.9; border:none;outline:none;color:rgb(84, 52, 153,1);background:black;font-weight:900;" onclick="Alerth.ok()">OK</button>';
+      document.getElementById('dialogboxfoot').innerHTML = '<button id="alertok" style="font-size:18px;width:80px;padding:4px 10px;margin:4x; border-radius:10px;opacity:0.9; border:none;outline:none;font-weight:900;" onclick="Alerth.ok()">OK</button>';
       
   }
 	this.ok = function(){
@@ -55,7 +55,7 @@ function CustomAlerta(){
       $("#dialogbox").css("top","40px")
       document.getElementById('dialogboxhead').innerHTML = "";
       document.getElementById('dialogboxbody').innerHTML = dialog;
-      document.getElementById('dialogboxfoot').innerHTML = '<button id="alertok" style="font-size:18px;width:80px;padding:4px 10px;margin:4x; border-radius:10px;opacity:0.9; border:none;outline:none;color:rgb(84, 52, 153,1);background:black;font-weight:900;" onclick="Alerta.ok()">OK</button>';
+      document.getElementById('dialogboxfoot').innerHTML = '<button id="alertok" style="font-size:18px;width:80px;padding:4px 10px;margin:4x; border-radius:10px;opacity:0.9; border:none;outline:none;font-weight:900;" onclick="Alerta.ok()">OK</button>';
       
   }
 	this.ok = function(){
@@ -96,12 +96,13 @@ var Confirm = new CustomConfirm();
 <body>
 <div id="upload">
 	<center>
-	<div id="upbox">
-		<input id="head-pdf" type="text" placeholder="Title" required><br><br>
+	<form id="upbox" enctype="multipart/form-data" method="post">
+	{%csrf_token%}
+		<input id="head-pdf" name="head" type="text" maxlength="32" placeholder="Title"><br><br>
 		
-		<input type="file" id="upload-pdf" required>
+		<input type="file" name="doc" id="upload-pdf" required>
 		<label for="upload-pdf" id="upbtn">Upload pdf</label>
-		<select id="select" required>
+		<select id="select" name="background" required>
 			  <option value="#0a4b94">Blue</option>
 			  <option value="#DAA520">Yellow</option>
 			  <option value="#95001b">Red</option>
@@ -110,8 +111,8 @@ var Confirm = new CustomConfirm();
 			  <option value="#930051">Pink</option>
 			  <option selected value="">Color</option>
 		</select><br><br><br>
-		<button id="send">Upload</button><i id="cross" class="fas fa-times-circle"></i>
-	</div>
+		<button type="submit"id="send">Upload</button><i id="cross" class="fas fa-times-circle"></i>
+	</form>
 	</center>
 	
 </div>
@@ -131,17 +132,17 @@ var Confirm = new CustomConfirm();
 		<div class="flex1">
 			<div id="logo" onclick="window.location.href='/'">Youroom</div>
 			<div id="searchbar" align="center">
-				<input type="text" {%if request.user.is_authenticated%}placeholder="Search.."{%else%}placeholder="Please login!" readonly{%endif%}>
+			
+				<input id="search" name="si" type="text" {%if request.user.is_authenticated%}placeholder="Search.."{%else%}placeholder="Please login!" readonly{%endif%}>
 			</div>
 			<div class="switch" style="display:inline-block">
 		        <button id="dark"class="inner-switch"><i class="fas fa-moon"></i></button>
-		        <i id="yt" class="fab fa-youtube"></i>
+		        
 		    </div>
 		    {%if user.is_authenticated%}
 			<div id="username">AYO {{request.user.username|title}}
 			<div id="dd">
-				<div>saved</div>
-				<div>github</div>
+				<div><a target="_blank" href="https://github.com/Nikhiljsh12/Youroom12" style="text-decoration:none">github link</a></div>
 				<div id="logout">logout</div>
 				
 			</div>
@@ -158,6 +159,9 @@ var Confirm = new CustomConfirm();
 <div id="full">
 {%block content%}
 {%endblock%}
+<center>
+<div id="footer"><span style="opacity:0.6">Made by </span>Nikhil Joshi<span style="opacity:0.6"> at lighthouse hacks</span></div>
+</center>
 </div>
 <div id="iyt"></div>
 </body>
@@ -223,23 +227,13 @@ $("#cross").on("click",function(){
 
 $("#send").on("click",function(){
 
-if($("#head-pdf").val().length>0 && $("#upload-pdf").val().lenth>0 && $("#color-pdf").val().legth>0){
-	
-$.ajax({
-		 url:'/web/upload/',
-		 type:'POST',
-			data: {
-				'user':'{{request.user.id}}',
-				'title':$("#head-pdf").val(),
-				'pdf':$("#upload-pdf").val(),
-				'color':$("#select").val(),
-	            'csrfmiddlewaretoken': '{{csrf_token}}',
-			},
-			dataType:"json",
-		}) 
+if($("#head-pdf").val().length>0 && $("#upload-pdf").val().length>0 && $("#select").find(":selected").val().length>0){
+
 }else{
-	alerta("Watch the empty fields")
+	Alerta.render('Watch the empty fields!','a')
 }
 })
+
+
 </script>
 </html>

@@ -7,6 +7,6 @@ from django.urls.conf import include
 
 urlpatterns = [
     path('', RedirectView.as_view(url='home/')),
-    path('home/', views.home),
-    path('upload/', views.upload),
+    path('home/', views.upload.as_view(success_url="/")),
+    path('doc/', views.doc),
 ]

@@ -11,20 +11,24 @@ Upload
 <div id="flex3">
 {%for n1 in posts%}
 	<div class="flex4">
-		<div class="display">{{n1.doc}}</div>
+		<div class="display" id="ye{{n1.id}}">
+		<center>
+		<img src="{%static 'images/pdf.png'%}"style="height:260px;opacity:0.1">
+		</center>
+		</div>
 		<div class="flex5">
-			<div class="he">{{n1.head}} <span class="he2"><small>Uploaded by {{n1.doc_by}} on {{n1.cr_date.date}}</small></span></div>
+			<div class="he">{{n1.head}} <span class="he2"><small>Uploaded by {{n1.doc_by|title}} on {{n1.cr_date.date}}</small></span></div>
 			<div class="flex6">
-				<div><span id="a_Volume{{n1.id}}">Volume~0.5</span><input id="b_Volume{{n1.id}}" oninput="di({{n1.id}},'Volume')" type="range" min="0.1" max="1" step="0.1"></div>
-				<div><span id="a_Rate{{n1.id}}">Rate~1</span><input id="b_Rate{{n1.id}}" oninput="di({{n1.id}},'Rate')" type="range" min="0.1" max="2" step="0.1"></div>
-				<div><span id="a_Pitch{{n1.id}}">Pitch~1</span><input id="b_Pitch{{n1.id}}" oninput="di({{n1.id}},'Pitch')" type="range" min="0.1" max="2" step="0.1"></div>
+				<div><span id="a_Volume{{n1.id}}">Volume~0.5</span><input name="volume" id="b_Volume{{n1.id}}" oninput="di({{n1.id}},'Volume')" type="range" min="0.1" max="1" step="0.1"></div>
+				<div><span id="a_Rate{{n1.id}}">Rate~1</span><input name="rate" id="b_Rate{{n1.id}}" oninput="di({{n1.id}},'Rate')" type="range" min="0.1" max="2" step="0.1"></div>
+				<div><span id="a_Pitch{{n1.id}}">Pitch~1</span><input name="pitch" id="b_Pitch{{n1.id}}" oninput="di({{n1.id}},'Pitch')" type="range" min="0.1" max="2" step="0.1"></div>
 			</div>
 			<div class="flex7">
-				<div style="width:32%;background:{{n1.background}}99">Start listening<3</div>
-				<div style="background:{{n1.background}}99">Open pdf</div>
-				<div style="background:{{n1.background}}99">Report</div>
-				<div style="color:{{n1.background}};font-size:60px;margin-top:-30px;width:10%"><i class="far fa-heart"></i></div>
-				<div style="color:{{n1.background}};font-size:54px;margin-top:-26px;width:10%"><i class="far fa-bookmark"></i></div>
+				<input id="te{{n1.id}}" oninput="fi('{{n1.id}}')" class="dis" style="background:{{n1.background}}99" min=1 placeholder="Pg" type="number">
+		
+				<div id="btn{{n1.id}}" onclick="add('{{n1.id}}')" style="background:{{n1.background}}99">Start listening<3</div>
+				<div style="background:{{n1.background}}99"><a style="text-decoration:none;color:black" target="_blank" href="{{n1.doc.url}}">Open pdf</a></div>
+				
 			</div>
 		</div>
 	</div>
@@ -56,9 +60,41 @@ Search, find, if not, upload, listen! EzPz
 {%endif%}
 
 <script>
+function fi(id){
+$.ajax({
+	 url:'/web/doc/',
+	 type:'POST',
+		data: {
+			'pk':id,
+			'page':$("#te"+id).val(),
+           	'csrfmiddlewaretoken': '{{csrf_token}}' ,
+		},
+		dataType:"json",
+	}) 
+.done(function(response){
+	 $("#ye"+id).text(response.data.toLowerCase())
+})
+}
+
+function add(id) {
+	
+var message = new SpeechSynthesisUtterance($("#ye"+id).text());
+var voices = speechSynthesis.getVoices();
+message['volume'] = $("#b_Volume"+id).val();
+message['rate'] = $("#b_Rate"+id).val();
+message['pitch'] = $("#b_Pitch"+id).val();
+
+
+    speechSynthesis.speak(message);
+};
+
 function di(id,i){
 	$("#a_"+i+id).text(i+"~"+$("#b_"+i+id).val())
 }
+
+
+
+
 </script>
 
 {%endblock%}
