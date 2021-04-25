@@ -37,3 +37,23 @@ darkModeToggle.addEventListener("click",()=>{
 
 })
 
+window.onscroll = function() {
+	scrollFunction();
+	};
+function scrollFunction() {
+
+  
+  if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50){
+	  
+  }else{
+	  
+  }
+}
+document.getElementById("select").onchange=function() {
+
+	document.getElementById("select").style.background=this.options[this.selectedIndex].value+"CC"
+	document.getElementById("cross").style.color=this.options[this.selectedIndex].value+"CC"
+
+}
+
+

@@ -22,14 +22,116 @@ function(){
 		$("#dd").css("display","none")
 	}
 })
+
+//custom alert
+
+function CustomAlerth(){
+  this.render = function(dialog){
+      var dialogoverlay = document.getElementById('dialogoverlay');
+      var dialogbox = document.getElementById('dialogbox');
+      $('#dialogbox').fadeIn(60)
+      $('#dialogoverlay').fadeIn(60)
+      $("#dialogbox").css("top","40px")
+      document.getElementById('dialogboxhead').innerHTML = "";
+      document.getElementById('dialogboxbody').innerHTML = dialog;
+      document.getElementById('dialogboxfoot').innerHTML = '<button id="alertok" style="font-size:18px;width:80px;padding:4px 10px;margin:4x; border-radius:10px;opacity:0.9; border:none;outline:none;color:rgb(84, 52, 153,1);background:black;font-weight:900;" onclick="Alerth.ok()">OK</button>';
+      
+  }
+	this.ok = function(){
+      $("#dialogbox").css("top","-60px")
+		$('#dialogbox').fadeOut(40)
+		$('#dialogoverlay').fadeOut(40)
+		
+	}
+}
+var Alerth = new CustomAlerth();
+
+function CustomAlerta(){
+  this.render = function(dialog){
+      var dialogoverlay = document.getElementById('dialogoverlay');
+      var dialogbox = document.getElementById('dialogbox');
+      $('#dialogbox').fadeIn(60)
+      $('#dialogoverlay').fadeIn(60)
+      $("#dialogbox").css("top","40px")
+      document.getElementById('dialogboxhead').innerHTML = "";
+      document.getElementById('dialogboxbody').innerHTML = dialog;
+      document.getElementById('dialogboxfoot').innerHTML = '<button id="alertok" style="font-size:18px;width:80px;padding:4px 10px;margin:4x; border-radius:10px;opacity:0.9; border:none;outline:none;color:rgb(84, 52, 153,1);background:black;font-weight:900;" onclick="Alerta.ok()">OK</button>';
+      
+  }
+	this.ok = function(){
+      $("#dialogbox").css("top","-60px")
+		$('#dialogbox').fadeOut(40)
+		$('#dialogoverlay').fadeOut(40)
+		
+	}
+}
+var Alerta = new CustomAlerta();
+
+
+function CustomConfirm(){
+	this.render = function(dialog,op){
+      var dialogoverlay = document.getElementById('dialogoverlay');
+      var dialogbox = document.getElementById('dialogbox');
+      $('#dialogbox').fadeIn(60)
+      $('#dialogoverlay').fadeIn(60)
+      $("#dialogbox").css("top","40px")
+      document.getElementById('dialogboxhead').innerHTML = "";
+      document.getElementById('dialogboxbody').innerHTML = dialog;
+      if(op=="yt"){
+    	  
+      }else{
+      	document.getElementById('dialogboxfoot').innerHTML = '<form method="post" action="/accounts/logout/">{%csrf_token%}<button type="submit" id="alertok1" style="font-size:18px;width:80px;padding:4px 10px;margin:4x; border-radius:10px;opacity:0.9; border:none;outline:none;font-weight:900;">Logout</button></form><button id="alertok2" style="font-size:18px;width:auto;padding:4px 10px; border-radius:10px;opacity:0.9; border:none;outline:none;background:none;font-weight:900;"  onclick="Confirm.no()">No. Take me back!</button>';
+	  }
+	}
+	this.no = function(){
+      $("#dialogbox").css("top","-60px")
+		$('#dialogbox').fadeOut(40)
+		$('#dialogoverlay').fadeOut(40)
+	}
+}
+var Confirm = new CustomConfirm();
+
 </script>
 </head>
 <body>
+<div id="upload">
+	<center>
+	<div id="upbox">
+		<input id="head-pdf" type="text" placeholder="Title" required><br><br>
+		
+		<input type="file" id="upload-pdf" required>
+		<label for="upload-pdf" id="upbtn">Upload pdf</label>
+		<select id="select" required>
+			  <option value="#0a4b94">Blue</option>
+			  <option value="#DAA520">Yellow</option>
+			  <option value="#95001b">Red</option>
+			  <option value="#463f85">Purple</option>
+			  <option value="#009342">Green</option>
+			  <option value="#930051">Pink</option>
+			  <option selected value="">Color</option>
+		</select><br><br><br>
+		<button id="send">Upload</button><i id="cross" class="fas fa-times-circle"></i>
+	</div>
+	</center>
+	
+</div>
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+<center>
+  <div id="dialogbg" style="border-radius:16px;font-size:18px;width:30%;max-width:500px;min-width:340px;" >
+    <div id="dialogboxhead"></div>
+    <div id="dialogboxbody"></div>
+    <div id="dialogboxfoot"></div>
+  </div>
+</center>
+</div>
+
+
 	<header id="header">
 		<div class="flex1">
-			<div id="logo">Youroom</div>
+			<div id="logo" onclick="window.location.href='/'">Youroom</div>
 			<div id="searchbar" align="center">
-				<input type="text" placeholder="Search..">
+				<input type="text" {%if request.user.is_authenticated%}placeholder="Search.."{%else%}placeholder="Please login!" readonly{%endif%}>
 			</div>
 			<div class="switch" style="display:inline-block">
 		        <button id="dark"class="inner-switch"><i class="fas fa-moon"></i></button>
@@ -40,13 +142,14 @@ function(){
 			<div id="dd">
 				<div>saved</div>
 				<div>github</div>
-				<div>logut</div>
+				<div id="logout">logout</div>
+				
 			</div>
 			</div>
-			{%else%}
+			{%else%}<!-- 
 			<div class="switch" style="display:inline-block">
 				<a id="google" href="{% provider_login_url 'google' %}"><i style="font-size:52px" class="fab fa-google"></i><span style="font-size:20px"> login</span></a>			
-			</div>
+			</div> -->
 			{%endif%}
 			
 			
@@ -56,12 +159,87 @@ function(){
 {%block content%}
 {%endblock%}
 </div>
-<iframe id="iyt" class="iyt" frameborder="0" allow="autoplay; encrypted-media" src="https://www.youtube.com/embed/-5KAN9_CzSA?rel=0?version=3&autoplay=1&controls=0&showinfo=0&loop=1"></iframe>
+<div id="iyt"></div>
 </body>
-<script src="{%static 'main.js'%}"/></script>
-<script type="text/javascript">
-window.onload=function(){
-	document.querySelector('.ytp-large-play-button ytp-button').click();
+<script src="{%static 'main.js'%}">
+</script>
+<script>
+$("#logout").on("click",function(){
+	Confirm.render('Are you sure you want to logout?','logout')
+})
+$("#yt").on("click",function(){
+	Confirm.render('Enter video url','yt')
+})
+      // 1. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 2. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('iyt', {
+          height: '100%',
+          width: '100%',
+          playerVars: {
+                    autoplay: 1,
+                    loop: 1,
+                    controls: 0,
+                    showinfo: 0,
+                    autohide: 1,
+                    modestbranding: 1,
+                    vq: 'hd720'},
+          videoId: '-5KAN9_CzSA',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      // 3. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        event.target.setVolume(10);
+        event.target.playVideo();
+      }
+
+      var done = false;
+      function onPlayerStateChange(event) {
+        
+      }
+      function stopVideo() {
+        player.stopVideo();
+        
+      }
+$("#up").on("click",function(){
+	$("#upload").fadeIn("fast")
+})
+$("#cross").on("click",function(){
+	$("#upload").fadeOut("fast")
+})
+
+$("#send").on("click",function(){
+
+if($("#head-pdf").val().length>0 && $("#upload-pdf").val().lenth>0 && $("#color-pdf").val().legth>0){
+	
+$.ajax({
+		 url:'/web/upload/',
+		 type:'POST',
+			data: {
+				'user':'{{request.user.id}}',
+				'title':$("#head-pdf").val(),
+				'pdf':$("#upload-pdf").val(),
+				'color':$("#select").val(),
+	            'csrfmiddlewaretoken': '{{csrf_token}}',
+			},
+			dataType:"json",
+		}) 
+}else{
+	alerta("Watch the empty fields")
 }
+})
 </script>
 </html>

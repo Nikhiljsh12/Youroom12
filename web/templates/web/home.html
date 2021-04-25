@@ -1,4 +1,64 @@
 {%extends "base.html"%}
 {%block content%}
+{% load socialaccount %}
+{% load static %}
+<div style="height:120px">
+</div>
+{%if user.is_authenticated%}
+<div id="up">
+Upload
+</div>
+<div id="flex3">
+{%for n1 in posts%}
+	<div class="flex4">
+		<div class="display">{{n1.doc}}</div>
+		<div class="flex5">
+			<div class="he">{{n1.head}} <span class="he2"><small>Uploaded by {{n1.doc_by}} on {{n1.cr_date.date}}</small></span></div>
+			<div class="flex6">
+				<div><span id="a_Volume{{n1.id}}">Volume~0.5</span><input id="b_Volume{{n1.id}}" oninput="di({{n1.id}},'Volume')" type="range" min="0.1" max="1" step="0.1"></div>
+				<div><span id="a_Rate{{n1.id}}">Rate~1</span><input id="b_Rate{{n1.id}}" oninput="di({{n1.id}},'Rate')" type="range" min="0.1" max="2" step="0.1"></div>
+				<div><span id="a_Pitch{{n1.id}}">Pitch~1</span><input id="b_Pitch{{n1.id}}" oninput="di({{n1.id}},'Pitch')" type="range" min="0.1" max="2" step="0.1"></div>
+			</div>
+			<div class="flex7">
+				<div style="width:32%;background:{{n1.background}}99">Start listening<3</div>
+				<div style="background:{{n1.background}}99">Open pdf</div>
+				<div style="background:{{n1.background}}99">Report</div>
+				<div style="color:{{n1.background}};font-size:60px;margin-top:-30px;width:10%"><i class="far fa-heart"></i></div>
+				<div style="color:{{n1.background}};font-size:54px;margin-top:-26px;width:10%"><i class="far fa-bookmark"></i></div>
+			</div>
+		</div>
+	</div>
+{%endfor%}
+</div>
+
+{%else%}
+<div style="font-size:100px;font-family:courier;transform: rotate(90deg);transform-origin:0;position:absolute;top:50px;font-weight:900;color:#50505066;left:80px">Use Headphones</div>
+<div id="cont">
+Hello! welcome to Youroom, yes it's all yours<3<br><br>
++ Login & enter your personal room with tons of study material & favorite songs all along :)<br>
++ Helps you build interest and helps concentrate when you just can't!<br><br>
+
+But, how?<br><br>
++ Bruh! we know you're on the screen all day, why not take a break, yet not a break?<br>
++ Find audiobooks of any book from it's pdf and lie down!<br>
++ Listen to boring chapters along with your favorite songs.. Mmm interesting<br><br>
+Basically,<br><br>
+Due to the global pandemic, students are forced to spend hour on screens.<br>
+We need rest, our eyes need rest.<br>
+We can now easily 'listen' to audio books from any pdf along with something soothing.. Great!<br>
+These materials keep on adding finally to a collection of audio books on each topic :)<br>
+Imagine listening to books by just typing it's name in the search!<br><br>
+Search, find, if not, upload, listen! EzPz
+</div>
+<div id="gbox">
+	<a id="loginbtn" target="_blank" href="{% provider_login_url 'google' %}">Click here to login or register with <i class="fab fa-google"></i>oogle</a>
+</div>
+{%endif%}
+
+<script>
+function di(id,i){
+	$("#a_"+i+id).text(i+"~"+$("#b_"+i+id).val())
+}
+</script>
 
 {%endblock%}
