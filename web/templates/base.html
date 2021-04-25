@@ -1,0 +1,67 @@
+{%load static%}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://kit.fontawesome.com/d9f393eb75.js" crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youroom</title>
+    <!--<link rel = "icon" href =  
+		"/static/images/icontopWB6.png" 
+        type = "image/x-icon">-->
+    <link href="{%static 'style.css'%}" rel="stylesheet"/>
+<script>
+$(document).mousemove(
+function(){
+	if($("#username:hover").length != 0){
+		$("#dd").css("display","block")
+	}
+	else{
+		$("#dd").css("display","none")
+	}
+})
+</script>
+</head>
+<body>
+	<header id="header">
+		<div class="flex1">
+			<div id="logo">Youroom</div>
+			<div id="searchbar" align="center">
+				<input type="text" placeholder="Search..">
+			</div>
+			<div class="switch" style="display:inline-block">
+		        <button id="dark"class="inner-switch"><i class="fas fa-moon"></i></button>
+		        <i id="yt" class="fab fa-youtube"></i>
+		    </div>
+		    {%if user.is_authenticated%}
+			<div id="username">AYO {{request.user.username|title}}
+			<div id="dd">
+				<div>saved</div>
+				<div>github</div>
+				<div>logut</div>
+			</div>
+			</div>
+			{%else%}
+			<div class="switch" style="display:inline-block">
+				<a id="google" href="{% provider_login_url 'google' %}"><i style="font-size:52px" class="fab fa-google"></i><span style="font-size:20px"> login</span></a>			
+			</div>
+			{%endif%}
+			
+			
+		</div>	
+	</header>
+<div id="full">
+{%block content%}
+{%endblock%}
+</div>
+<iframe id="iyt" class="iyt" frameborder="0" allow="autoplay; encrypted-media" src="https://www.youtube.com/embed/-5KAN9_CzSA?rel=0?version=3&autoplay=1&controls=0&showinfo=0&loop=1"></iframe>
+</body>
+<script src="{%static 'main.js'%}"/></script>
+<script type="text/javascript">
+window.onload=function(){
+	document.querySelector('.ytp-large-play-button ytp-button').click();
+}
+</script>
+</html>
